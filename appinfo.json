@@ -1,0 +1,39 @@
+{
+  "uuid": "69b8ec00-cd34-4d1f-b1e4-c589edf7eb4c",
+  "shortName": "pebblodoro",
+  "longName": "pebblodoro",
+  "companyName": "Jonapps",
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": [
+      {
+        "type": "png",
+        "name": "CROSS",
+        "file": "images/cross.png"
+      },
+      {
+        "type": "png",
+        "name": "TICK",
+        "file": "images/tick.png"
+      },
+      {
+        "type": "png",
+        "name": "CONFIRM",
+        "file": "images/confirm.png"
+      },
+      {
+        "type": "png",
+        "name": "POMMODORO",
+        "file": "images/pommodoro.png"
+      }
+    ]
+  }
+}

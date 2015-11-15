@@ -35,6 +35,9 @@
 #ifndef PEBBLODORO_H
 #define PEBBLODORO_H
 
+#include "main_menu.h"
+#include "settings.h"
+
 #define STORAGE_VERSION_KEY 0
 #define STORAGE_VERSION 1
 #define FOCUS_TIME_KEY 1
@@ -50,6 +53,7 @@
 #define WINDOW_MAIN_MENU 0
 #define WINDOW_COUNTDOWN 1
 #define WINDOW_BREAK_OR_EXTEND 2
+#define WINDOW_SETTINGS 3
 
 
 char current_countdown_type;

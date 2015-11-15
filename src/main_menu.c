@@ -16,21 +16,21 @@ void main_window_load(Window *window) {
   // Create Window's child Layers here
   Layer *window_layer = window_get_root_layer(s_main_window);
   GRect bounds = layer_get_bounds(window_layer);
-  const int32_t num_sections = 3;
+  int32_t num_sections = 0;
   static SimpleMenuItem s_main_menu_items[8];
-  s_main_menu_items[0] = (SimpleMenuItem) {
+  s_main_menu_items[num_sections++] = (SimpleMenuItem) {
     .title = "Start Focus",
     .subtitle = NULL,
     .icon = NULL,
     .callback = main_menu_callback
   };
-  s_main_menu_items[1] = (SimpleMenuItem) {
+  s_main_menu_items[num_sections++] = (SimpleMenuItem) {
     .title = "Start Break",
     .subtitle = NULL,
     .icon = NULL,
     .callback = main_menu_callback
   };
-  s_main_menu_items[2] = (SimpleMenuItem) {
+  s_main_menu_items[num_sections++] = (SimpleMenuItem) {
     .title = "Settings",
     .subtitle = NULL,
     .icon = NULL,
@@ -51,7 +51,7 @@ void main_window_load(Window *window) {
 }
 
 static void main_menu_callback(int index, void *context) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "MAINMENU:%d", index);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "main_menu_callback(%d)", index);
   switch (index) {
     case 0:
       start_focus();
@@ -60,6 +60,9 @@ static void main_menu_callback(int index, void *context) {
       start_break();
       break;
     break;
+    case 2:
+      load_settings();
+      break;
     default:
     break;
   }

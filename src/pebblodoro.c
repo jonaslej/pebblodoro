@@ -7,8 +7,8 @@ static Window *s_countdown_window;
 static TextLayer *s_label_layer;
 static BitmapLayer *s_icon_layer;
 static GBitmap *s_icon_bitmap, *s_tick_bitmap, *s_cross_bitmap, *s_ellipsis_bitmap;
-static int focus_time = 25 *60;
-static int break_time = 5 *60;
+static int focus_time = 25 ;//*60;
+static int break_time = 5 ;//*60;
 static int focus_extra_time = 5 *60;
 static int break_extra_time = 1 *60;
 static int current = 0;
@@ -64,7 +64,6 @@ static void deinit(void) {
 static void countdown_window_load(Window *window) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "countdown_window_load");
   current_window = WINDOW_COUNTDOWN;
-  draw_pommodoro();
   update_countdown_string(current);
 }
 
@@ -75,6 +74,7 @@ void window_unload(Window *window) {
 }
 
 static void draw_pommodoro() {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Drawing tomaito tomahto");
   Layer *window_layer = window_get_root_layer(s_countdown_window);
   GRect window_bounds = layer_get_bounds(window_layer);
   // Clear the window for the icon
@@ -93,7 +93,10 @@ static void draw_pommodoro() {
 }
 
 static void update_countdown_string(int time) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "update_countdown_string");
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "current_window = %d", current_window);
   static char s_focus_buffer[32];
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "s_countdown_window.isloaded = %d", window_is_loaded(s_countdown_window));
   Layer *window_layer = window_get_root_layer(s_countdown_window);
   GRect window_bounds = layer_get_bounds(window_layer);
   GRect bitmap_bounds = gbitmap_get_bounds(s_icon_bitmap);
@@ -125,18 +128,20 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 static void countdown(int countdown_type, int is_extra) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "coundown type %d is_extra %d", countdown_type, is_extra);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "current_window = %d", current_window);
   //focus_time = time;
   current_countdown_type = countdown_type;
   // Create countdown window
-  if(current_window == WINDOW_MAIN_MENU){
-    s_countdown_window= window_create();
+  if(current_window != WINDOW_COUNTDOWN){
+    s_countdown_window = window_create();
     window_set_window_handlers(s_main_window, (WindowHandlers) {
       .load = countdown_window_load,
       .unload = window_unload,
     });
-    window_stack_push(s_countdown_window, true);
+    current_window = WINDOW_COUNTDOWN;
   }
-  //current = (countdown_type == COUNTDOWN_TYPE_FOCUS ? focus_time : break_time);
+  window_stack_push(s_countdown_window, true);
+
   if(countdown_type == COUNTDOWN_TYPE_FOCUS)
   {
     current = (is_extra == COUNTDOWN_EXTRA_TIME ? focus_extra_time : focus_time);
@@ -145,6 +150,8 @@ static void countdown(int countdown_type, int is_extra) {
   {
     current = (is_extra == COUNTDOWN_EXTRA_TIME ? break_extra_time : break_time);
   }
+
+  draw_pommodoro();
   tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
 }
 void start_focus() {
@@ -196,7 +203,7 @@ static void break_or_extend() {
   snprintf(s_text_buffer, sizeof(s_text_buffer),
     "Continue %s for %d more minutes?",
     (current_countdown_type == COUNTDOWN_TYPE_FOCUS ? "focus" : "break"),
-    (current_countdown_type == COUNTDOWN_TYPE_FOCUS ? focus_extra_time : break_extra_time));
+    (current_countdown_type == COUNTDOWN_TYPE_FOCUS ? focus_extra_time : break_extra_time)/60);
   text_layer_set_text(s_label_layer, s_text_buffer);
   layer_add_child(window_layer, text_layer_get_layer(s_label_layer));
 
@@ -218,7 +225,12 @@ static void break_or_extend() {
     BUTTON_ID_DOWN,
     s_cross_bitmap
   );
-  action_bar_layer_add_to_window(action_bar, s_main_window);
+  action_bar_layer_add_to_window(action_bar, s_countdown_window);
+  if(!window_is_loaded(s_countdown_window))
+  {
+    window_stack_push(s_countdown_window, true);
+    current_window = WINDOW_COUNTDOWN;
+  }
 }
 
 static void break_or_extend_click_config_provider(void *context)

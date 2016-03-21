@@ -59,5 +59,12 @@ static void settings_window_load(Window *window) {
 }
 
 static void settings_menu_callback(int index, void *context) {
+  switch(index) {
+    case 0:
+    break
+  }
+}
+
+static void set_timer(int set_focus) {
 
 }
